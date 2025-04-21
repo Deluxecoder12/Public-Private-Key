@@ -3,7 +3,6 @@ let privateKey, publicKey, modulus;
 let challenge, signature, verification;
 
 // Constants for our simplified RSA
-// We'll generate these randomly now
 let MODULUS, PRIVATE_KEY, PUBLIC_KEY;
 
 // Initialize the demo when the page loads
@@ -117,6 +116,9 @@ function applyTypingEffectToContainer(container) {
     textElements.forEach((element, index) => {
         // Skip if this element should not have typing effect
         if (skipElementsArray.includes(element)) return;
+
+        // Skip elements with HTML tags
+        if (element.innerHTML.includes('<')) return;
         
         // Store the original text in a data attribute for reference
         const originalText = element.textContent;
@@ -130,7 +132,7 @@ function applyTypingEffectToContainer(container) {
         // Start typing effect after delay
         setTimeout(() => {
             // Reset the element before typing to ensure clean start
-            element.textContent = '';
+            element.innerHTML = '';
             typeTextImproved(element, originalText, 0);
         }, startDelay);
     });
@@ -279,8 +281,8 @@ function createSignature() {
     signature = modExp(challenge, privateKey, modulus);
     
     // Display the calculation
-    document.getElementById('signature-calculation').textContent = 
-        `${challenge}^${privateKey} mod ${modulus} = ${signature}`;
+    document.getElementById('signature-calculation').innerHTML = 
+        `${challenge}<sup>${privateKey}</sup> mod ${modulus} = ${signature}`;
     
     // Display the signature result
     document.getElementById('signature-value').textContent = signature;
@@ -304,8 +306,8 @@ function verifySignature() {
     verification = modExp(signature, emmaPublicKey, modulus);
     
     // Display the calculation
-    document.getElementById('verification-calculation').textContent = 
-        `${signature}^${emmaPublicKey} mod ${modulus} = ${verification}`;
+    document.getElementById('verification-calculation').innerHTML = 
+        `${signature}<sup>${emmaPublicKey}</sup> mod ${modulus} = ${verification}`;
     
     // Display the result container
     showContainer(5);

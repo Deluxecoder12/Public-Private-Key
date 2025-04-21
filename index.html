@@ -50,14 +50,7 @@
 
         <!-- Introduction Container -->
         <div class="story-container active" id="container-intro">
-            <h2>The Challenge of Digital Identity</h2>
-            <div class="context-box">
-                <h3>How Do We Prove Who We Are Online?</h3>
-                <p>In the physical world, we can recognize people by their faces, voices, or handwriting.</p>
-                <p>But in the digital world, how do you prove you're really YOU?</p>
-                <p>Passwords can be stolen. Security questions can be guessed.</p>
-                <p>This is where public-private key cryptography comes in...</p>
-            </div>
+            <h2>How Emma can be sure she is talking to Jake?</h2>
             <p>In this demonstration, <span class="jake">Jake</span> wants to prove his identity to <span class="emma">Emma</span> using public-private key cryptography.</p>
             <button class="next-button" onclick="showContainer(1)">See how it works →</button>
         </div>
@@ -65,7 +58,7 @@
         <!-- Step 1: Key Generation -->
         <div class="story-container" id="container-1">
             <h2>The Setup: Keys and Identity</h2>
-            <p><span class="jake">Jake</span> has generated his cryptographic keys. This is done automatically when he is setting up an account.</p>
+            <p><span class="jake">Jake</span> has generated his private and public keys. This is done automatically when he is setting up an account.</p>
             
             <div class="info-tooltip">
                 <span class="info-icon">i</span>
@@ -95,8 +88,7 @@
 
         <!-- Step 2: Emma's Challenge -->
         <div class="story-container" id="container-2">
-            <h2>The Challenge: Emma Verifies Jake's Identity</h2>
-            <p><span class="emma">Emma</span> wants to make sure she's really talking to <span class="jake">Jake</span>. She sends him a challenge message:</p>
+            <h2>Emma sends the Challenge to Jake</h2>
             
             <div class="challenge-section">
                 <div class="message emma-message">
@@ -124,8 +116,7 @@
 
         <!-- Step 3: Jake's Signature -->
         <div class="story-container" id="container-3">
-            <h2>The Response: Jake Signs with His Private Key</h2>
-            <p><span class="jake">Jake</span> receives the challenge and signs it with his private key:</p>
+            <h2>Jake receives the challenge and signs it with his private key</h2>
             
             <div class="signature-section">
                 <div class="signature-process">

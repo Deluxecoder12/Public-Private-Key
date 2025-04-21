@@ -239,6 +239,9 @@ input[type="number"] {
     border-radius: 4px;
     color: var(--text-color);
     font-family: 'Courier New', monospace;
+    width: 100%;
+    min-width: 120px;
+    box-sizing: border-box;
 }
 
 .signature-section, .verification-section {
@@ -617,6 +620,16 @@ button:hover::after {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+#container-intro p{
+    font-size: 18px;
+}
+
+.equation sup {
+    font-size: 0.75em;
+    position: relative;
+    top: -0.5em;
 }
 
 .progress-dot {
