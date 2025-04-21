@@ -14,6 +14,40 @@
             <p class="subtitle">The story of <span class="jake">Jake</span> and <span class="emma">Emma</span>'s secure communication</p>
         </header>
 
+        <div class="progress-container" id="progress-container">
+            <div class="quiz-progress">
+                <div class="progress-step" data-step="intro">
+                    <div class="progress-dot"></div>
+                    <div>Intro</div>
+                </div>
+                <div class="progress-step" data-step="1">
+                    <div class="progress-dot"></div>
+                    <div>Keys</div>
+                </div>
+                <div class="progress-step" data-step="2">
+                    <div class="progress-dot"></div>
+                    <div>Challenge</div>
+                </div>
+                <div class="progress-step" data-step="3">
+                    <div class="progress-dot"></div>
+                    <div>Signature</div>
+                </div>
+                <div class="progress-step" data-step="4">
+                    <div class="progress-dot"></div>
+                    <div>Verification</div>
+                </div>
+                <div class="progress-step" data-step="5">
+                    <div class="progress-dot"></div>
+                    <div>Results</div>
+                </div>
+                <div class="progress-step" data-step="6">
+                    <div class="progress-dot"></div>
+                    <div>Quiz</div>
+                </div>
+                <div class="completion-tick" id="completion-tick">✓</div>
+            </div>
+        </div>
+
         <!-- Introduction Container -->
         <div class="story-container active" id="container-intro">
             <h2>The Challenge of Digital Identity</h2>
@@ -24,14 +58,14 @@
                 <p>Passwords can be stolen. Security questions can be guessed.</p>
                 <p>This is where public-private key cryptography comes in...</p>
             </div>
-            <p>In this demonstration, we'll see how <span class="jake">Jake</span> proves his identity to <span class="emma">Emma</span> using public-private key cryptography.</p>
+            <p>In this demonstration, <span class="jake">Jake</span> wants to prove his identity to <span class="emma">Emma</span> using public-private key cryptography.</p>
             <button class="next-button" onclick="showContainer(1)">See how it works →</button>
         </div>
 
         <!-- Step 1: Key Generation -->
-        <div class="story-container active" id="container-1">
+        <div class="story-container" id="container-1">
             <h2>The Setup: Keys and Identity</h2>
-            <p><span class="jake">Jake</span> has generated his cryptographic keys:</p>
+            <p><span class="jake">Jake</span> has generated his cryptographic keys. This is done automatically when he is setting up an account.</p>
             
             <div class="info-tooltip">
                 <span class="info-icon">i</span>
@@ -54,8 +88,6 @@
                         <p class="note">This is shared with Emma and the world.</p>
                     </div>
                 </div>
-
-                
             </div>
 
             <button class="next-button" onclick="showContainer(2)">Continue the story →</button>
@@ -154,8 +186,109 @@
                     <p>The only difference is that real systems use numbers with hundreds of digits instead of our small example numbers.</p>
                 </div>
                 
-                <button class="reset-button" onclick="resetDemo()">Try Again</button>
+                <button class="next-button" onclick="showContainer(6)">Test your knowledge →</button>
             </div>
+        </div>
+
+        <!-- Step 6: Quiz for Middle Schoolers -->
+        <div class="story-container" id="container-6">
+            <h2>Authentication Quiz: Test Your Knowledge</h2>
+            <p>Let's check what you've learned about public-private key authentication!</p>
+            
+            <div class="quiz-section">
+                <!-- Question 1 -->
+                <div class="quiz-question">
+                    <h4>1. Try using a different public key. What happens if Emma uses the wrong public key?</h4>
+                    <div class="quiz-options">
+                        <button class="quiz-option" data-question="1" data-correct="true">
+                            The verification will fail, even if she's talking to the real Jake.
+                        </button>
+                        <button class="quiz-option" data-question="1" data-correct="false">
+                            The verification will succeed since she's talking to the real Jake.
+                        </button>
+                        <button class="quiz-option" data-question="1" data-correct="false">
+                            The verification will sometimes succeed and sometimes fail randomly.
+                        </button>
+                    </div>
+                    <div class="quiz-result" id="result-1"></div>
+                </div>
+                
+                <!-- Question 2 -->
+                <div class="quiz-question">
+                    <h4>2. Which key must be kept secret?</h4>
+                    <div class="quiz-options">
+                        <button class="quiz-option" data-question="2" data-correct="false">
+                            The public key must be kept secret.
+                        </button>
+                        <button class="quiz-option" data-question="2" data-correct="true">
+                            The private key must be kept secret.
+                        </button>
+                        <button class="quiz-option" data-question="2" data-correct="false">
+                            Both keys must be kept secret.
+                        </button>
+                    </div>
+                    <div class="quiz-result" id="result-2"></div>
+                </div>
+                
+                <!-- Question 3 -->
+                <div class="quiz-question">
+                    <h4>3. Why does the verification result need to match the original challenge?</h4>
+                    <div class="quiz-options">
+                        <button class="quiz-option" data-question="3" data-correct="true">
+                            It proves the person has the correct private key that matches the public key.
+                        </button>
+                        <button class="quiz-option" data-question="3" data-correct="false">
+                            It's just a coincidence when it matches.
+                        </button>
+                        <button class="quiz-option" data-question="3" data-correct="false">
+                            The challenge and verification are always the same number.
+                        </button>
+                    </div>
+                    <div class="quiz-result" id="result-3"></div>
+                </div>
+                
+                <!-- Question 4 -->
+                <div class="quiz-question">
+                    <h4>4. What would happen if someone tried to pretend to be Jake?</h4>
+                    <div class="quiz-options">
+                        <button class="quiz-option" data-question="4" data-correct="false">
+                            They would succeed if they knew Jake's public key.
+                        </button>
+                        <button class="quiz-option" data-question="4" data-correct="true">
+                            They would fail because they don't have Jake's private key.
+                        </button>
+                        <button class="quiz-option" data-question="4" data-correct="false">
+                            They would succeed if they used a different signature.
+                        </button>
+                    </div>
+                    <div class="quiz-result" id="result-4"></div>
+                </div>
+                
+                <!-- Question 5 -->
+                <div class="quiz-question">
+                    <h4>5. In real life, where is public-private key authentication used?</h4>
+                    <div class="quiz-options">
+                        <button class="quiz-option" data-question="5" data-correct="false">
+                            Only in spy movies.
+                        </button>
+                        <button class="quiz-option" data-question="5" data-correct="false">
+                            Only between people who know each other.
+                        </button>
+                        <button class="quiz-option" data-question="5" data-correct="true">
+                            Websites, software updates, and secure communication systems.
+                        </button>
+                    </div>
+                    <div class="quiz-result" id="result-5"></div>
+                </div>
+            </div>
+            
+            <div class="certificate" id="completion-certificate">
+                <h3>Congratulations! You completed the authentication demo!</h3>
+                <p>You now understand how Jake proved his identity to Emma using public-private key cryptography.</p>
+                <p>This same technology helps keep you safe online every day!</p>
+            </div>
+            
+            <button class="reset-button" onclick="resetDemo()">Try Again</button>
         </div>
     </div>
 </body>

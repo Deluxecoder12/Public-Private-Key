@@ -23,6 +23,10 @@ body {
     padding: 20px;
 }
 
+h3 {
+    text-align: center;
+}
+
 header {
     text-align: center;
     margin-bottom: 30px;
@@ -163,7 +167,7 @@ h1, h2 {
 }
 
 .note {
-    font-size: 12px;
+    font-size: 14px;
     font-style: italic;
     text-align: center;
 }
@@ -395,5 +399,340 @@ button:hover::after {
     100% {
         opacity: 0;
         transform: scale(40, 40);
+    }
+}
+
+/* Quiz section styles */
+.quiz-section {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid var(--highlight-color);
+}
+
+.quiz-question {
+    margin-bottom: 25px;
+    border-bottom: 1px dashed #444;
+    padding-bottom: 15px;
+}
+
+.quiz-question:last-child {
+    border-bottom: none;
+}
+
+.quiz-question h4 {
+    color: var(--highlight-color);
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.quiz-option {
+    background-color: var(--panel-bg-color);
+    border: 1px solid #444;
+    border-radius: 8px;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: left;
+    display: block;
+    width: 100%;
+    color: var(--text-color);
+    font-family: 'Courier New', monospace;
+    position: relative;
+    overflow: hidden;
+}
+
+.quiz-option:hover {
+    background-color: rgba(0, 255, 157, 0.1);
+    border-color: var(--highlight-color);
+}
+
+/* Button ripple effect */
+.quiz-option::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    border-radius: 100%;
+    transform: scale(1, 1) translate(-50%);
+    transform-origin: 50% 50%;
+}
+
+.quiz-option:hover::after {
+    animation: ripple 1s ease-out;
+}
+
+.quiz-option.selected {
+    font-weight: bold;
+}
+
+.quiz-option.correct {
+    background-color: rgba(195, 232, 141, 0.1);
+    border-color: var(--success-color);
+    color: var(--success-color);
+}
+
+.quiz-option.incorrect {
+    background-color: rgba(255, 83, 112, 0.1);
+    border-color: var(--warning-color);
+    color: var(--warning-color);
+}
+
+.quiz-result {
+    margin-top: 10px;
+    font-weight: bold;
+    min-height: 24px;
+    padding-left: 10px;
+}
+
+.quiz-result.correct {
+    color: var(--success-color);
+}
+
+.quiz-result.incorrect {
+    color: var(--warning-color);
+}
+
+/* Progress container styling */
+.progress-container {
+    margin-bottom: 30px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 15px;
+}
+
+.quiz-progress {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+}
+
+.progress-step {
+    width: 18%;
+    text-align: center;
+    position: relative;
+    font-size: 12px;
+}
+
+.progress-dot {
+    width: 20px;
+    height: 20px;
+    background-color: var(--panel-bg-color);
+    border: 1px solid #444;
+    border-radius: 50%;
+    margin: 0 auto 5px;
+    transition: all 0.3s;
+}
+
+.progress-step.completed .progress-dot {
+    background-color: var(--highlight-color);
+    border-color: var(--highlight-color);
+}
+
+.progress-step.current .progress-dot {
+    background-color: var(--emma-color);
+    border-color: var(--emma-color);
+    animation: pulse 1.5s infinite;
+}
+
+/* Line connecting dots */
+.progress-step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 60%;
+    width: 80%;
+    height: 2px;
+    background-color: #444;
+    z-index: -1;
+}
+
+.progress-step.completed:not(:last-child)::after {
+    background-color: var(--highlight-color);
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .progress-step {
+        font-size: 10px;
+    }
+    
+    .progress-dot {
+        width: 15px;
+        height: 15px;
+    }
+}
+
+.completion-tick {
+    position: absolute;
+    right: -40px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 30px;
+    background-color: var(--success-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--main-bg-color);
+    font-weight: bold;
+    font-size: 16px;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.completion-tick.visible {
+    opacity: 1;
+}
+
+.progress-step[data-step="6"] .progress-dot.completed {
+    background-color: var(--success-color);
+    border-color: var(--success-color);
+}
+
+.progress-step[data-step="6"] .progress-dot.completed::after {
+    content: '✓';
+    color: var(--main-bg-color);
+    font-size: 12px;
+    font-weight: bold;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.progress-dot {
+    width: 20px;
+    height: 20px;
+    background-color: var(--panel-bg-color);
+    border: 1px solid #444;
+    border-radius: 50%;
+    margin: 0 auto 5px;
+    transition: all 0.3s;
+    position: relative;
+}
+
+/* Certificate styles */
+.certificate {
+    background-color: rgba(0, 195, 255, 0.1);
+    border: 2px solid var(--jake-color);
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    margin-top: 30px;
+    display: none;
+}
+
+.certificate.completed {
+    display: block;
+    animation: fadeIn 1s ease;
+}
+
+.certificate h3 {
+    color: white;
+    margin-top: 0;
+}
+
+.certificate p {
+    margin-bottom: 0;
+}
+
+/* Add this to your existing animation keyframes */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* Apply animation to certificate */
+.certificate.completed {
+    animation: fadeIn 1s ease, pulse 2s infinite;
+}
+
+/* Progress indicator */
+.quiz-progress {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+
+.progress-step {
+    width: 18%;
+    text-align: center;
+    position: relative;
+    font-size: 12px;
+}
+
+.progress-dot {
+    width: 20px;
+    height: 20px;
+    background-color: var(--panel-bg-color);
+    border: 1px solid #444;
+    border-radius: 50%;
+    margin: 0 auto 5px;
+    transition: all 0.3s;
+}
+
+.progress-step.completed .progress-dot {
+    background-color: var(--highlight-color);
+    border-color: var(--highlight-color);
+}
+
+.progress-step.current .progress-dot {
+    background-color: var(--emma-color);
+    border-color: var(--emma-color);
+    animation: pulse 1.5s infinite;
+}
+
+/* Line connecting dots */
+.progress-step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 60%;
+    width: 80%;
+    height: 2px;
+    background-color: #444;
+    z-index: -1;
+}
+
+.progress-step.completed:not(:last-child)::after {
+    background-color: var(--highlight-color);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .progress-step {
+        font-size: 10px;
+    }
+    
+    .progress-dot {
+        width: 15px;
+        height: 15px;
+    }
+    
+    .quiz-option {
+        padding: 8px 12px;
     }
 }

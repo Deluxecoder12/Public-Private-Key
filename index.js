@@ -17,6 +17,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const firstContainer = document.getElementById('container-1');
         applyTypingEffectToContainer(firstContainer);
     }, 500);
+
+    if (document.getElementById('container-6') && 
+        document.getElementById('container-6').classList.contains('active')) {
+        setupQuizOptions();
+    }
 });
 
 // Generate random RSA key components
@@ -99,7 +104,7 @@ function initializeDemo() {
     document.getElementById('public-key').textContent = publicKey;
 }
 
-// Apply typing effect to all text in a container
+// This function applies a typing effect to all text elements in a container
 function applyTypingEffectToContainer(container) {
     // Apply to paragraphs, list items, and similar text elements
     const textElements = container.querySelectorAll('p, li, .context-box p, .note, .equation');
@@ -113,7 +118,9 @@ function applyTypingEffectToContainer(container) {
         // Skip if this element should not have typing effect
         if (skipElementsArray.includes(element)) return;
         
+        // Store the original text in a data attribute for reference
         const originalText = element.textContent;
+        element.setAttribute('data-original-text', originalText);
         element.textContent = '';
         element.style.minHeight = '1em'; // Prevent layout shifts
         
@@ -122,18 +129,26 @@ function applyTypingEffectToContainer(container) {
         
         // Start typing effect after delay
         setTimeout(() => {
-            typeText(element, originalText, 0);
+            // Reset the element before typing to ensure clean start
+            element.textContent = '';
+            typeTextImproved(element, originalText, 0);
         }, startDelay);
     });
 }
 
-// Type text character by character
-function typeText(element, text, index) {
+// Improved typing function with better character handling
+function typeTextImproved(element, text, index) {
     if (index < text.length) {
-        element.textContent += text.charAt(index);
+        // Add one character at a time
+        element.textContent = text.substring(0, index + 1);
+        
+        // Schedule the next character
         setTimeout(() => {
-            typeText(element, text, index + 1);
+            typeTextImproved(element, text, index + 1);
         }, 15); // Speed of typing (lower = faster)
+    } else {
+        // When finished, ensure the final text matches the original exactly
+        element.textContent = text;
     }
 }
 
@@ -223,11 +238,19 @@ function showContainer(containerNumber) {
     if (containerToShow) {
         containerToShow.classList.add('active');
         
+        // Update progress indicators
+        updateProgress(containerNumber);
+        
         // Scroll to the newly visible container
         containerToShow.scrollIntoView({ behavior: 'smooth' });
         
         // Apply typing effect to the newly shown container
         applyTypingEffectToContainer(containerToShow);
+        
+        // If this is the quiz container (container-6), set up the quiz options
+        if (containerId === 'container-6') {
+            setupQuizOptions();
+        }
     } else {
         console.error(`Container ${containerId} not found`);
     }
@@ -323,7 +346,79 @@ function verifySignature() {
     }
 }
 
-// Reset the demo to start again
+// Make sure to add this function to your JavaScript file
+function setupQuizOptions() {
+    // Select all quiz option buttons
+    const quizButtons = document.querySelectorAll('.quiz-option');
+    
+    // Add event listeners to each button
+    quizButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Get question ID and whether this is the correct answer
+            const questionId = this.getAttribute('data-question');
+            const isCorrect = this.getAttribute('data-correct') === 'true';
+            
+            // Find the result element for this question
+            const resultElement = document.getElementById(`result-${questionId}`);
+            
+            // Remove any existing selected/correct/incorrect classes from all options for this question
+            document.querySelectorAll(`.quiz-option[data-question="${questionId}"]`).forEach(option => {
+                option.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            // Add selected class to the clicked button
+            this.classList.add('selected');
+            
+            // Add correct/incorrect class based on the answer
+            if (isCorrect) {
+                this.classList.add('correct');
+                resultElement.textContent = 'Correct! ✅';
+                resultElement.className = 'quiz-result correct';
+            } else {
+                this.classList.add('incorrect');
+                resultElement.textContent = 'Try again! ❌';
+                resultElement.className = 'quiz-result incorrect';
+            }
+            
+            // Check if all questions have been answered correctly
+            checkQuizCompletion();
+        });
+    });
+}
+
+// Function to check if all quiz questions have been answered correctly
+function checkQuizCompletion() {
+    // Get all question IDs
+    const questionIds = Array.from(new Set(
+        Array.from(document.querySelectorAll('.quiz-option'))
+            .map(option => option.getAttribute('data-question'))
+    ));
+    
+    // Check if all questions have a correct answer selected
+    const allCorrect = questionIds.every(id => {
+        return document.querySelector(`.quiz-option[data-question="${id}"][data-correct="true"].selected`) !== null;
+    });
+    
+    // Show certificate if all questions are answered correctly
+    const certificate = document.getElementById('completion-certificate');
+    if (certificate && allCorrect) {
+        certificate.classList.add('completed');
+        
+        // Update all progress steps to completed
+        document.querySelectorAll('.progress-step').forEach(step => {
+            step.classList.remove('current');
+            step.classList.add('completed');
+        });
+        
+        // Add special styling to the quiz dot in the progress bar
+        const quizDot = document.querySelector('.progress-step[data-step="6"] .progress-dot');
+        if (quizDot) {
+            quizDot.classList.add('completed');
+        }
+    }
+}
+
+// Update the resetDemo function
 function resetDemo() {
     // Generate new keys
     generateKeys();
@@ -336,6 +431,40 @@ function resetDemo() {
     document.getElementById('signature-calculation').textContent = '';
     document.getElementById('signature-value').textContent = '';
     document.getElementById('verification-calculation').textContent = '';
+    
+    // Reset quiz responses
+    document.querySelectorAll('.quiz-result').forEach(result => {
+        result.textContent = '';
+        result.className = 'quiz-result';
+    });
+    
+    document.querySelectorAll('.quiz-option').forEach(option => {
+        option.classList.remove('selected', 'correct', 'incorrect');
+    });
+    
+    // Hide certificate
+    const certificate = document.getElementById('completion-certificate');
+    if (certificate) {
+        certificate.classList.remove('completed');
+    }
+    
+    // Reset progress bar completely
+    document.querySelectorAll('.progress-step').forEach(step => {
+        step.classList.remove('completed', 'current', 'all-done');
+        
+        // Clear any tick marks
+        const dot = step.querySelector('.progress-dot');
+        if (dot) {
+            dot.innerHTML = '';
+            dot.classList.remove('completed');
+        }
+    });
+    
+    // Set intro as the current step
+    const introStep = document.querySelector('.progress-step[data-step="intro"]');
+    if (introStep) {
+        introStep.classList.add('current');
+    }
     
     // Hide all containers except the first
     document.querySelectorAll('.story-container').forEach((container, index) => {
@@ -354,10 +483,10 @@ function resetDemo() {
     document.getElementById('public-key').textContent = publicKey;
     
     // Scroll to the top container
-    document.getElementById('container-1').scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('container-intro').scrollIntoView({ behavior: 'smooth' });
     
     // Apply typing effect to the first container
-    const firstContainer = document.getElementById('container-1');
+    const firstContainer = document.getElementById('container-intro');
     applyTypingEffectToContainer(firstContainer);
 }
 
@@ -381,4 +510,26 @@ function modExp(base, exponent, modulus) {
     }
     
     return result;
+}
+
+function updateProgress(containerNumber) {
+    // Skip if progress container doesn't exist
+    if (!document.getElementById('progress-container')) return;
+    
+    // Convert 'intro' to 0 for numeric comparison
+    const currentNum = containerNumber === 'intro' ? 0 : 
+                      (typeof containerNumber === 'string' ? parseInt(containerNumber) : containerNumber);
+    
+    // Update all progress steps
+    document.querySelectorAll('.progress-step').forEach((step, index) => {
+        // Clear any existing classes
+        step.classList.remove('completed', 'current');
+        
+        // Mark as completed or current
+        if (index < currentNum) {
+            step.classList.add('completed');
+        } else if (index === currentNum) {
+            step.classList.add('current');
+        }
+    });
 }
