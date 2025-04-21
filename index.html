@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication: Jake & Emma's Secret Communication</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="index.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Public-Private Key: <span class="highlight">Authentication</span></h1>
+            <p class="subtitle">The story of <span class="jake">Jake</span> and <span class="emma">Emma</span>'s secure communication</p>
+        </header>
+
+        <!-- Introduction Container -->
+        <div class="story-container active" id="container-intro">
+            <h2>The Challenge of Digital Identity</h2>
+            <div class="context-box">
+                <h3>How Do We Prove Who We Are Online?</h3>
+                <p>In the physical world, we can recognize people by their faces, voices, or handwriting.</p>
+                <p>But in the digital world, how do you prove you're really YOU?</p>
+                <p>Passwords can be stolen. Security questions can be guessed.</p>
+                <p>This is where public-private key cryptography comes in...</p>
+            </div>
+            <p>In this demonstration, we'll see how <span class="jake">Jake</span> proves his identity to <span class="emma">Emma</span> using public-private key cryptography.</p>
+            <button class="next-button" onclick="showContainer(1)">See how it works →</button>
+        </div>
+
+        <!-- Step 1: Key Generation -->
+        <div class="story-container active" id="container-1">
+            <h2>The Setup: Keys and Identity</h2>
+            <p><span class="jake">Jake</span> has generated his cryptographic keys:</p>
+            
+            <div class="info-tooltip">
+                <span class="info-icon">i</span>
+                <div class="tooltip-content">
+                    In real cryptography, these numbers would be hundreds of digits long. 
+                    We're using smaller integers to make the concept easier to understand.
+                </div>
+            </div>
+
+            <div class="key-info">
+                <div class="key-pair">
+                    <div class="key private">
+                        <h3><span class="jake">Jake's</span> Private Key (d)</h3>
+                        <div class="key-value" id="private-key"></div>
+                        <p class="note">Jake keeps this secret! Nobody else can see this.</p>
+                    </div>
+                    <div class="key public">
+                        <h3><span class="jake">Jake's</span> Public Key (e)</h3>
+                        <div class="key-value" id="public-key"></div>
+                        <p class="note">This is shared with Emma and the world.</p>
+                    </div>
+                </div>
+
+                
+            </div>
+
+            <button class="next-button" onclick="showContainer(2)">Continue the story →</button>
+        </div>
+
+        <!-- Step 2: Emma's Challenge -->
+        <div class="story-container" id="container-2">
+            <h2>The Challenge: Emma Verifies Jake's Identity</h2>
+            <p><span class="emma">Emma</span> wants to make sure she's really talking to <span class="jake">Jake</span>. She sends him a challenge message:</p>
+            
+            <div class="challenge-section">
+                <div class="message emma-message">
+                    <div class="message-header">
+                        <span class="emma">Emma</span> sends a challenge:
+                    </div>
+                    <div class="message-content">
+                        <label for="challenge">Enter a number as challenge:</label>
+                        <div class="input-group">
+                            <input type="number" id="challenge" min="1" max="1000" placeholder="Enter a number (1-1000)">
+                            <button onclick="generateRandomChallenge()">Random</button>
+                        </div>
+                        <div class="info-tooltip">
+                            <span class="info-icon">i</span>
+                            <div class="tooltip-content">
+                                In real systems, challenges would be complex data. 
+                                We're using simple integers for demonstration.
+                            </div>
+                        </div>
+                        <button onclick="createSignature()">Send Challenge to Jake →</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3: Jake's Signature -->
+        <div class="story-container" id="container-3">
+            <h2>The Response: Jake Signs with His Private Key</h2>
+            <p><span class="jake">Jake</span> receives the challenge and signs it with his private key:</p>
+            
+            <div class="signature-section">
+                <div class="signature-process">
+                    <div class="signature-equation">
+                        <span class="equation">signature = (challenge)<sup>d</sup> mod n</span>
+                        <span class="equation-result" id="signature-calculation"></span>
+                    </div>
+                </div>
+
+                <div class="message jake-message">
+                    <div class="message-header">
+                        <span class="jake">Jake</span> sends back the signed response:
+                    </div>
+                    <div class="message-content">
+                        <div class="signature-display" id="signature-value"></div>
+                    </div>
+                </div>
+                
+                <button class="next-button" onclick="showContainer(4)">Send to Emma →</button>
+            </div>
+        </div>
+
+        <!-- Step 4: Emma's Verification -->
+        <div class="story-container" id="container-4">
+            <h2>The Verification: Emma Checks Jake's Signature</h2>
+            <p><span class="emma">Emma</span> receives Jake's signed response and verifies it using his public key:</p>
+            
+            <div class="verification-section">
+                <div class="emma-verify">
+                    <label for="emma-public-key">What was Jake's public key (e) that Emma already has?</label>
+                    <input type="number" id="emma-public-key" placeholder="Enter Jake's public key (e)">
+                    
+                    <div class="verification-equation">
+                        <span class="equation">verification = (signature)<sup>e</sup> mod n</span>
+                        <span class="equation-result" id="verification-calculation"></span>
+                    </div>
+                    
+                    <button onclick="verifySignature()">Verify Identity</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 5: Result -->
+        <div class="story-container" id="container-5">
+            <h2>The Result: Authentication Decision</h2>
+            <div id="verification-result" class="verification-result">
+                <!-- Result will be inserted here by JavaScript -->
+            </div>
+            
+            <div class="explanation">
+                <h3>How This Works:</h3>
+                <p>When the verification result equals the original challenge, Emma knows she's really talking to Jake!</p>
+                <p>This is because only someone with Jake's private key (d) could create a signature that verifies correctly with his public key (e)</p>
+                
+                <div class="real-world">
+                    <h3>In The Real World:</h3>
+                    <p>This same principle protects your connection to secure websites, verifies software updates, and enables passwordless logins!</p>
+                    <p>The only difference is that real systems use numbers with hundreds of digits instead of our small example numbers.</p>
+                </div>
+                
+                <button class="reset-button" onclick="resetDemo()">Try Again</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
