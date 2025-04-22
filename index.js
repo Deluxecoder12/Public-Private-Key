@@ -26,17 +26,19 @@ document.addEventListener('DOMContentLoaded', function() {
 // Generate random RSA key components
 function generateKeys() {
     // We'll use small prime numbers for educational purposes
-    const primes = [3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73];
+    const primes = [3, 5, 7, 11, 13];
     
     // Randomly select two different primes
-    const primeIndex1 = Math.floor(Math.random() * primes.length);
-    let primeIndex2 = Math.floor(Math.random() * primes.length);
-    while (primeIndex2 === primeIndex1) {
-        primeIndex2 = Math.floor(Math.random() * primes.length);
+    const p = primes[Math.floor(Math.random() * 3)]; // Use only the first 3 primes
+    const q = primes[Math.floor(Math.random() * 3)];
+    if (p * q > 100) {
+        // Try again with smaller primes
+        p = primes[Math.floor(Math.random() * 3)]; // Use only the first 3 primes
+        q = primes[Math.floor(Math.random() * 3)];
+        while (q === p) {
+            q = primes[Math.floor(Math.random() * 3)];
+        }
     }
-    
-    const p = primes[primeIndex1];
-    const q = primes[primeIndex2];
     
     // Calculate modulus n = p * q
     MODULUS = p * q;
@@ -46,7 +48,7 @@ function generateKeys() {
     
     // Choose public key e (coprime to totient)
     // For simplicity, let's pick from a set of common public exponents
-    const possibleEs = [3, 5, 7, 11, 13, 17, 19, 23];
+    const possibleEs = [3, 5, 7];
     let validEs = [];
     
     for (const e of possibleEs) {
