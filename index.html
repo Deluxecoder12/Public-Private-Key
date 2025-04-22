@@ -11,55 +11,18 @@
     <div class="container">
         <header>
             <h1>Public-Private Key: <span class="highlight">Authentication</span></h1>
-            <p class="subtitle">The story of <span class="jake">Jake</span> and <span class="emma">Emma</span>'s secure communication</p>
         </header>
-
-        <div class="progress-container" id="progress-container">
-            <div class="quiz-progress">
-                <div class="progress-step" data-step="intro">
-                    <div class="progress-dot"></div>
-                    <div>Intro</div>
-                </div>
-                <div class="progress-step" data-step="1">
-                    <div class="progress-dot"></div>
-                    <div>Keys</div>
-                </div>
-                <div class="progress-step" data-step="2">
-                    <div class="progress-dot"></div>
-                    <div>Challenge</div>
-                </div>
-                <div class="progress-step" data-step="3">
-                    <div class="progress-dot"></div>
-                    <div>Signature</div>
-                </div>
-                <div class="progress-step" data-step="4">
-                    <div class="progress-dot"></div>
-                    <div>Verification</div>
-                </div>
-                <div class="progress-step" data-step="5">
-                    <div class="progress-dot"></div>
-                    <div>Results</div>
-                </div>
-                <div class="progress-step" data-step="6">
-                    <div class="progress-dot"></div>
-                    <div>Quiz</div>
-                </div>
-                <div class="completion-tick" id="completion-tick">✓</div>
-            </div>
-        </div>
 
         <!-- Introduction Container -->
         <div class="story-container active" id="container-intro">
-            <h2>How Emma can be sure she is talking to Jake?</h2>
-            <p>In this demonstration, <span class="jake">Jake</span> wants to prove his identity to <span class="emma">Emma</span> using public-private key cryptography.</p>
+            <h2>How can Emma be sure she is talking to Jake?</h2>
             <button class="next-button" onclick="showContainer(1)">See how it works →</button>
         </div>
 
         <!-- Step 1: Key Generation -->
         <div class="story-container" id="container-1">
-            <h2>The Setup: Keys and Identity</h2>
-            <p><span class="jake">Jake</span> has generated his private and public keys. This is done automatically when he is setting up an account.</p>
-            
+            <h2> Step 0: Generating Private and Public Keys</h2>
+        
             <div class="info-tooltip">
                 <span class="info-icon">i</span>
                 <div class="tooltip-content">
@@ -88,7 +51,7 @@
 
         <!-- Step 2: Emma's Challenge -->
         <div class="story-container" id="container-2">
-            <h2>Emma sends the Challenge to Jake</h2>
+            <h2>Step 1: Emma sends the Challenge to Jake</h2>
             
             <div class="challenge-section">
                 <div class="message emma-message">
@@ -116,7 +79,7 @@
 
         <!-- Step 3: Jake's Signature -->
         <div class="story-container" id="container-3">
-            <h2>Jake receives the challenge and signs it with his private key</h2>
+            <h2>Step 2: Jake receives the challenge and signs it with his private key</h2>
             
             <div class="signature-section">
                 <div class="signature-process">
@@ -141,7 +104,7 @@
 
         <!-- Step 4: Emma's Verification -->
         <div class="story-container" id="container-4">
-            <h2>The Verification: Emma Checks Jake's Signature</h2>
+            <h2>Step 3: The Verification: Emma Checks Jake's Signature</h2>
             <p><span class="emma">Emma</span> receives Jake's signed response and verifies it using his public key:</p>
             
             <div class="verification-section">
@@ -150,7 +113,7 @@
                     <input type="number" id="emma-public-key" placeholder="Enter Jake's public key (e)">
                     
                     <div class="verification-equation">
-                        <span class="equation">verification = (signature)<sup>e</sup> mod n</span>
+                        <span class="equation">output = (signature)<sup>e</sup> mod n</span>
                         <span class="equation-result" id="verification-calculation"></span>
                     </div>
                     
@@ -167,10 +130,6 @@
             </div>
             
             <div class="explanation">
-                <h3>How This Works:</h3>
-                <p>When the verification result equals the original challenge, Emma knows she's really talking to Jake!</p>
-                <p>This is because only someone with Jake's private key (d) could create a signature that verifies correctly with his public key (e)</p>
-                
                 <div class="real-world">
                     <h3>In The Real World:</h3>
                     <p>This same principle protects your connection to secure websites, verifies software updates, and enables passwordless logins!</p>
@@ -266,7 +225,7 @@
                             Only between people who know each other.
                         </button>
                         <button class="quiz-option" data-question="5" data-correct="true">
-                            Websites, software updates, and secure communication systems.
+                            Bank websites and secure communication systems.
                         </button>
                     </div>
                     <div class="quiz-result" id="result-5"></div>
