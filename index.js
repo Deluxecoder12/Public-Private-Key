@@ -48,7 +48,7 @@ function generateKeys() {
     
     // Choose public key e (coprime to totient)
     // For simplicity, let's pick from a set of common public exponents
-    const possibleEs = [3, 5, 7];
+    const possibleEs = [3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37];
     let validEs = [];
     
     for (const e of possibleEs) {
