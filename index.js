@@ -70,7 +70,7 @@ function generateKeys() {
         // Calculate private key d such that (d * e) % totient = 1
         PRIVATE_KEY = modInverse(PUBLIC_KEY, totient);
         
-        if (PRIVATE_KEY !== PUBLIC_KEY && PRIVATE_KEY > PUBLIC_KEY) {
+        if (PRIVATE_KEY !== PUBLIC_KEY) {
             console.log(`Generated RSA parameters: p=${p}, q=${q}, n=${MODULUS}, φ(n)=${totient}, e=${PUBLIC_KEY}, d=${PRIVATE_KEY}`);
             return; // Exit the function with our valid keys
         }
