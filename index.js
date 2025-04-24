@@ -25,62 +25,69 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Generate random RSA key components
 function generateKeys() {
-    // We'll use small prime numbers for educational purposes
     const primes = [3, 5, 7, 11, 13];
+    let maxAttempts = 30;
+    let attempts = 0;
     
-    // Randomly select two different primes
-    let p = primes[Math.floor(Math.random() * 3)]; // Use only the first 3 primes
-    let q = primes[Math.floor(Math.random() * 3)];
-    if (p * q > 50) {
-        // Try again with smaller primes
-        p = primes[Math.floor(Math.random() * 3)]; // Use only the first 3 primes
-        q = primes[Math.floor(Math.random() * 3)];
+    // Keep trying until we get different keys or run out of attempts
+    while (attempts < maxAttempts) {
+        // Randomly select two different primes
+        let p = primes[Math.floor(Math.random() * primes.length)];
+        let q = primes[Math.floor(Math.random() * primes.length)];
         while (q === p) {
-            q = primes[Math.floor(Math.random() * 3)];
+            q = primes[Math.floor(Math.random() * primes.length)];
         }
+        
+        if (p * q > 70) {
+            attempts++;
+            continue; // Try again with different primes
+        }
+        
+        // Calculate modulus n = p * q
+        MODULUS = p * q;
+        
+        // Calculate totient φ(n) = (p-1) * (q-1)
+        const totient = (p - 1) * (q - 1);
+        
+        // Choose public key e (coprime to totient)
+        const possibleEs = [3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37];
+        let validEs = [];
+        
+        for (const e of possibleEs) {
+            if (e < totient && gcd(e, totient) === 1) {
+                validEs.push(e);
+            }
+        }
+        
+        if (validEs.length === 0) {
+            attempts++;
+            continue; // No valid e values, try different primes
+        }
+        
+        // Select a random valid e
+        PUBLIC_KEY = validEs[Math.floor(Math.random() * validEs.length)];
+        
+        // Calculate private key d such that (d * e) % totient = 1
+        PRIVATE_KEY = modInverse(PUBLIC_KEY, totient);
+        
+        if (PRIVATE_KEY !== PUBLIC_KEY && PRIVATE_KEY > PUBLIC_KEY) {
+            console.log(`Generated RSA parameters: p=${p}, q=${q}, n=${MODULUS}, φ(n)=${totient}, e=${PUBLIC_KEY}, d=${PRIVATE_KEY}`);
+            return; // Exit the function with our valid keys
+        }
+        
+        attempts++;
     }
     
-    // Calculate modulus n = p * q
-    MODULUS = p * q;
-    
-    // Calculate totient φ(n) = (p-1) * (q-1)
-    const totient = (p - 1) * (q - 1);
-    
-    // Choose public key e (coprime to totient)
-    // For simplicity, let's pick from a set of common public exponents
-    const possibleEs = [3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37];
-    let validEs = [];
-    
-    for (const e of possibleEs) {
-        if (e < totient && gcd(e, totient) === 1) {
-            validEs.push(e);
-        }
-    }
-    
-    // Select a random valid e
-    PUBLIC_KEY = validEs[Math.floor(Math.random() * validEs.length)];
-    
-    // Calculate private key d such that (d * e) % totient = 1
-    PRIVATE_KEY = modInverse(PUBLIC_KEY, totient);
+    // If we get here, we couldn't find keys where e ≠ d after maxAttempts
+    console.warn(`Warning: Could not find keys where e ≠ d after ${maxAttempts} attempts.`);
 
-    // Add this check to ensure d and e aren't equal
-    if (PRIVATE_KEY === PUBLIC_KEY) {
-        // If they are equal, try a different public key if possible
-        if (validEs.length > 1) {
-            // Remove the current PUBLIC_KEY from validEs
-            validEs = validEs.filter(e => e !== PUBLIC_KEY);
-            // Choose a different public key
-            PUBLIC_KEY = validEs[Math.floor(Math.random() * validEs.length)];
-            // Recalculate the private key
-            PRIVATE_KEY = modInverse(PUBLIC_KEY, totient);
-        }
-        // If no other options, we could log a warning here
-        if (PRIVATE_KEY === PUBLIC_KEY) {
-            console.warn('Warning: Private key equals public key. This is not ideal for security.');
-        }
-    }
-    
-    console.log(`Generated RSA parameters: p=${p}, q=${q}, n=${MODULUS}, φ(n)=${totient}, e=${PUBLIC_KEY}, d=${PRIVATE_KEY}`);
+    const p = 5;
+    const q = 11;
+    MODULUS = p * q; // 55
+    const totient = (p-1) * (q-1); // 40
+    PUBLIC_KEY = 7;  // coprime with 40
+    PRIVATE_KEY = 23; // (7 * 23) % 40 = 1
+    console.log(`Using hardcoded parameters after ${maxAttempts} failed attempts: p=${p}, q=${q}, n=${MODULUS}, φ(n)=${totient}, e=${PUBLIC_KEY}, d=${PRIVATE_KEY}`);
 }
 
 // Calculate greatest common divisor (GCD)
@@ -89,15 +96,6 @@ function gcd(a, b) {
     return gcd(b, a % b);
 }
 
-// Calculate modular inverse
-function modInverse(a, m) {
-    for (let x = 1; x < m; x++) {
-        if ((a * x) % m === 1) {
-            return x;
-        }
-    }
-    return 1; // Fallback, should not happen with our inputs
-}
 
 // Set up initial state
 function initializeDemo() {
@@ -531,6 +529,20 @@ function modExp(base, exponent, modulus) {
     }
     
     return result;
+}
+
+// Calculate modular inverse
+function modInverse(a, m) {
+    if (gcd(a, m) > 1) {
+        // modulo inverse does not exist
+        return -1;
+    }
+
+    for (let x = 1; x < m; x++) {
+        if ((a * x) % m === 1) {
+            return x;
+        }
+    }
 }
 
 function updateProgress(containerNumber) {
