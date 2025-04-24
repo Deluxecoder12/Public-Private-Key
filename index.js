@@ -31,7 +31,7 @@ function generateKeys() {
     // Randomly select two different primes
     const p = primes[Math.floor(Math.random() * 3)]; // Use only the first 3 primes
     const q = primes[Math.floor(Math.random() * 3)];
-    if (p * q > 50) {
+    if (p * q > 60) {
         // Try again with smaller primes
         p = primes[Math.floor(Math.random() * 3)]; // Use only the first 3 primes
         q = primes[Math.floor(Math.random() * 3)];
