@@ -29,8 +29,8 @@ function generateKeys() {
     const primes = [3, 5, 7, 11, 13];
     
     // Randomly select two different primes
-    const p = primes[Math.floor(Math.random() * 3)]; // Use only the first 3 primes
-    const q = primes[Math.floor(Math.random() * 3)];
+    let p = primes[Math.floor(Math.random() * 3)]; // Use only the first 3 primes
+    let q = primes[Math.floor(Math.random() * 3)];
     if (p * q > 50) {
         // Try again with smaller primes
         p = primes[Math.floor(Math.random() * 3)]; // Use only the first 3 primes
@@ -62,6 +62,23 @@ function generateKeys() {
     
     // Calculate private key d such that (d * e) % totient = 1
     PRIVATE_KEY = modInverse(PUBLIC_KEY, totient);
+
+    // Add this check to ensure d and e aren't equal
+    if (PRIVATE_KEY === PUBLIC_KEY) {
+        // If they are equal, try a different public key if possible
+        if (validEs.length > 1) {
+            // Remove the current PUBLIC_KEY from validEs
+            validEs = validEs.filter(e => e !== PUBLIC_KEY);
+            // Choose a different public key
+            PUBLIC_KEY = validEs[Math.floor(Math.random() * validEs.length)];
+            // Recalculate the private key
+            PRIVATE_KEY = modInverse(PUBLIC_KEY, totient);
+        }
+        // If no other options, we could log a warning here
+        if (PRIVATE_KEY === PUBLIC_KEY) {
+            console.warn('Warning: Private key equals public key. This is not ideal for security.');
+        }
+    }
     
     console.log(`Generated RSA parameters: p=${p}, q=${q}, n=${MODULUS}, φ(n)=${totient}, e=${PUBLIC_KEY}, d=${PRIVATE_KEY}`);
 }
