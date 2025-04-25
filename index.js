@@ -118,6 +118,7 @@ function initializeDemo() {
     // Display the keys
     document.getElementById('private-key').textContent = privateKey;
     document.getElementById('public-key').textContent = publicKey;
+    document.getElementById('modulus').textContent = modulus;
 }
 
 // This function applies a typing effect to all text elements in a container
@@ -500,6 +501,7 @@ function resetDemo() {
     modulus = MODULUS;
     document.getElementById('private-key').textContent = privateKey;
     document.getElementById('public-key').textContent = publicKey;
+    document.getElementById('modulus').textContent = modulus;
     
     // Scroll to the top container
     document.getElementById('container-intro').scrollIntoView({ behavior: 'smooth' });
