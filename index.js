@@ -45,6 +45,9 @@ function generateKeys() {
         
         // Calculate modulus n = p * q
         MODULUS = p * q;
+
+        document.getElementById("challenge").placeholder = `Enter a number (1 - ${MODULUS})`
+        document.getElementById("challenge").max = MODULUS
         
         // Calculate totient φ(n) = (p-1) * (q-1)
         const totient = (p - 1) * (q - 1);
